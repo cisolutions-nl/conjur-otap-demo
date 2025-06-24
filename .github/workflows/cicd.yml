@@ -5,6 +5,7 @@ on:
 
 jobs:
   check-branch-name:
+    runs-on: ubuntu-latest
     name: Echo Test
     steps:
       - name: Check branch name
