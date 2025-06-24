@@ -1,0 +1,12 @@
+---
+name: CI/CD Pipeline
+on:
+  push:
+
+jobs:
+  check-branch-name:
+    name: Echo Test
+    steps:
+      - name: Check branch name
+        run: |
+          echo "Test"
