@@ -12,7 +12,6 @@ jobs:
   conjur-init:
     name: Conjur Policy Management
     runs-on: proxnuccis19
-    needs: [yaml-lint]
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cyberark/conjur-action@v2.0.5
