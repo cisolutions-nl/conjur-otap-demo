@@ -53,7 +53,6 @@ jobs:
           elif [[ $GITHUB_REF == 'refs/heads/production' ]]; then
             echo "environment=production" >> $GITHUB_ENV
           fi
-
       - name: Conjur Policy Load
         run: |
           cd ${{ github.sha }}
