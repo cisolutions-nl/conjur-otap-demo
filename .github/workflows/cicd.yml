@@ -13,7 +13,7 @@ jobs:
           url: ${{ vars.CONJUR_URL_INTERNAL }}
           account: ${{ vars.CONJUR_ACCOUNT }}
           host_id: ${{ vars.CONJUR_HOST_USERNAME }}
-          api_key: ${{ vars.CONJUR_HOST_API_KEY }}
+          api_key: ${{ secrets.CONJUR_HOST_API_KEY }}
           secrets: ${{ vars.CONJUR_USERNAME_PATH }}|conjur_username;${{ vars.CONJUR_PASSWORD_PATH }}|conjur_password  # yamllint disable-line rule:line-length
           certificate: ${{ vars.CONJUR_CERT }}
 
