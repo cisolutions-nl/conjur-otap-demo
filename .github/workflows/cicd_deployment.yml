@@ -1,0 +1,65 @@
+---
+name: Dev App CI/CD Pipeline Deploy
+on:
+  push:
+    branches:
+      - development
+      - test
+      - acceptance
+      - production
+
+jobs:
+  conjur-init:
+    name: Conjur Policy Management (load)
+    runs-on: proxnuccis19
+    steps:
+      - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
+        uses: cyberark/conjur-action@v2.0.5
+        with:
+          url: ${{ vars.CONJUR_URL_INTERNAL }}
+          account: ${{ vars.CONJUR_ACCOUNT }}
+          host_id: ${{ vars.CONJUR_HOST_USERNAME }}
+          api_key: ${{ secrets.CONJUR_HOST_API_KEY }}
+          secrets: ${{ vars.CONJUR_USERNAME_PATH }}|conjur_username;${{ vars.CONJUR_PASSWORD_PATH }}|conjur_password  # yamllint disable-line rule:line-length
+          certificate: ${{ vars.CONJUR_CERT }}
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.sha }}
+
+      - name: Conjur CLI init
+        run: |
+          cd ${{ github.sha }}
+          mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
+          chmod +x conjur
+          ./conjur --version
+          echo "yes" | ./conjur init \
+            -u ${{ vars.CONJUR_URL_INTERNAL }} \
+            -a ${{ vars.CONJUR_ACCOUNT }} \
+            --force \
+            --self-signed
+          ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
+          ./conjur whoami
+
+      - name: Set environment
+        id: set_environment
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/development' ]]; then
+            echo "environment=development" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/test' ]]; then
+            echo "environment=test" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/acceptance' ]]; then
+            echo "environment=acceptance" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/production' ]]; then
+            echo "environment=production" >> $GITHUB_ENV
+          fi
+
+      - name: Conjur Policy Load
+        run: |
+          cd ${{ github.sha }}
+          ./conjur policy load -b demo/${{ env.environment }} -f policies/test.yml
+
+      - name: Conjur CLI logout
+        run: |
+          cd ${{ github.sha }}
+          ./conjur logout
