@@ -3,7 +3,9 @@ name: Dev App CI/CD Pipeline Deploy
 on:
   push:
     branches:
-      - main
+      - test
+      - acceptance
+      - production
 
 jobs:
   conjur-init:
@@ -39,11 +41,24 @@ jobs:
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
 
+      - name: Set environment
+        id: set_environment
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/development' ]]; then
+            echo "environment=development" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/test' ]]; then
+            echo "environment=test" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/acceptance' ]]; then
+            echo "environment=acceptance" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/production' ]]; then
+            echo "environment=production" >> $GITHUB_ENV
+          fi
+
       - name: Conjur Policy Load
         if: github.event.pull_request.merged == true
         run: |
           cd ${{ github.sha }}
-          ./conjur policy load -b demo -f policies/test.yml
+          ./conjur policy load -b demo/${{ env.environment }} -f policies/test.yml
 
       - name: Conjur CLI logout
         run: |

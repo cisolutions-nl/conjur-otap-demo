@@ -1,3 +1,15 @@
+- !policy
+  id: ontwikkel
+
+- !policy
+  id: test
+
+- !policy
+  id: acceptance
+
+- !policy
+  id: production
+
 # Hosts;
 - !host
   id: test-workload
