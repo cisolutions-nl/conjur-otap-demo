@@ -37,6 +37,7 @@ jobs:
           path: ${{ github.sha }}
       - name: Conjur CLI init
         run: |
+          cd ${{ github.sha }}
           mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
           chmod +x conjur
           ./conjur --version
