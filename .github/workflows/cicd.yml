@@ -20,7 +20,7 @@ jobs:
       - name: Check out code from GitHub
         uses: actions/checkout@v3
 
-      - name: Trigger Conjur Policy load - init
+      - name: Conjur CLI init
         run: |
           mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
           chmod +x conjur
