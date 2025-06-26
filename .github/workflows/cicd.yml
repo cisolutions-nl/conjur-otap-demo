@@ -1,5 +1,5 @@
 ---
-name: CI/CD Pipeline
+name: Trigger Conjur policy load
 on:
   push:
 
@@ -25,6 +25,10 @@ jobs:
           mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
           chmod +x conjur
           ./conjur --version
-          echo "yes" | ./conjur init -u ${{ vars.CONJUR_URL_INTERNAL }} -a ${{ vars.CONJUR_ACCOUNT }} --force --self-signed  # yamllint disable-line rule:line-length
+          echo "yes" | ./conjur init \
+            -u ${{ vars.CONJUR_URL_INTERNAL }} \
+            -a ${{ vars.CONJUR_ACCOUNT }} \
+            --force \
+            --self-signed
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
