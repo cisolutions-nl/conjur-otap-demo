@@ -4,14 +4,31 @@ on:
   push:
 
 jobs:
-  check-branch-name:
-    runs-on: ubuntu-latest
-    name: Echo Test
+  conjur-who-ami:
+    runs-on: proxnuccisp10
     steps:
-      - name: Check branch name
-        run: |
-          echo "Test"
+      - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
+        uses: cisolutions-nl/conjur-action@v0.1
+        with:
+          url: ${{ vars.CONJUR_URL_EXTERNAL }}
+          account: ${{ vars.CONJUR_ACCOUNT }}
+          host_id: ${{ vars.CONJUR_HOST_USERNAME }}
+          api_key: ${{ vars.CONJUR_HOST_API_KEY }}
+          secrets: ${{ vars.CONJUR_USERNAME_PATH }}|conjur_username;${{ vars.CONJUR_PASSWORD_PATH }}|conjur_password  # yamllint disable-line rule:line-length
 
-      - name: Check branch name
+      - name: Check out code from GitHub
+        uses: actions/checkout@v3
+
+      - name: Trigger Conjur Policy load - init
         run: |
-          curl https://conjur.pocpuppy.nl
+          echo "Yes" | sudo docker run --rm -i \
+            -v $(pwd)/:/root cyberark/conjur-cli:8 \
+            init -u ${{ vars.CONJUR_URL_EXTERNAL }} \
+            --self-signed --force -a $CONJUR_USERNAME
+
+      - name: Trigger Conjur Policy load - login
+        run: |
+          sudo docker run --rm \
+            -v $(pwd)/:/root cyberark/conjur-cli:8 \
+            login -i $CONJUR_USERNAME \
+            -p $CONJUR_PASSWORD
