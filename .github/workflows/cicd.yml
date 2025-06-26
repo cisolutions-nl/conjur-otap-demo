@@ -10,6 +10,9 @@ jobs:
     container:
       image: python:3.11-slim
     steps:
+      - name: https://github.com/actions/checkout/issues/1720
+        run: |
+          chmod -R u+rwX .
       - name: Check out code from GitHub
         uses: actions/checkout@v4
       - name: Install Yamllint
@@ -31,13 +34,13 @@ jobs:
           api_key: ${{ secrets.CONJUR_HOST_API_KEY }}
           secrets: ${{ vars.CONJUR_USERNAME_PATH }}|conjur_username;${{ vars.CONJUR_PASSWORD_PATH }}|conjur_password  # yamllint disable-line rule:line-length
           certificate: ${{ vars.CONJUR_CERT }}
+      - name: https://github.com/actions/checkout/issues/1720
+        run: |
+          chmod -R u+rwX .
       - name: Check out code from GitHub
         uses: actions/checkout@v4
-        with:
-          path: ${{ github.sha }}
       - name: Conjur CLI init
         run: |
-          cd ${{ github.sha }}
           mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
           chmod +x conjur
           ./conjur --version
