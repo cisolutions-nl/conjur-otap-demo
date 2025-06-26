@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  conjur-who-ami:
+  conjur-init:
     runs-on: proxnuccis19
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
@@ -25,6 +25,6 @@ jobs:
           mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
           chmod +x conjur
           ./conjur --version
-          echo "yes" | ./conjur init -u ${{ vars.CONJUR_URL_INTERNAL }} -a ${{ vars.CONJUR_ACCOUNT }} --force --self-signed
+          echo "yes" | ./conjur init -u ${{ vars.CONJUR_URL_INTERNAL }} -a ${{ vars.CONJUR_ACCOUNT }} --force --self-signed  # yamllint disable-line rule:line-length
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
