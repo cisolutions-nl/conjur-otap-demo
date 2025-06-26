@@ -1,0 +1,63 @@
+---
+name: Dev App CI/CD Pipeline Build
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  yaml-lint:
+    name: Run yamllint
+    runs-on: proxnuccis19
+    container:
+      image: python:3.11-slim
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4
+      - name: Install Yamllint
+        run: pip install --no-cache-dir yamllint==1.35.1
+      - name: Run Yamllint
+        run: yamllint .
+
+  conjur-init:
+    name: Conjur Policy Management
+    runs-on: proxnuccis19
+    needs: [yaml-lint]
+    steps:
+      - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
+        uses: cyberark/conjur-action@v2.0.5
+        with:
+          url: ${{ vars.CONJUR_URL_INTERNAL }}
+          account: ${{ vars.CONJUR_ACCOUNT }}
+          host_id: ${{ vars.CONJUR_HOST_USERNAME }}
+          api_key: ${{ secrets.CONJUR_HOST_API_KEY }}
+          secrets: ${{ vars.CONJUR_USERNAME_PATH }}|conjur_username;${{ vars.CONJUR_PASSWORD_PATH }}|conjur_password  # yamllint disable-line rule:line-length
+          certificate: ${{ vars.CONJUR_CERT }}
+      - name: Check out code from GitHub
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.sha }}
+
+      - name: Conjur CLI init
+        run: |
+          cd ${{ github.sha }}
+          mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
+          chmod +x conjur
+          ./conjur --version
+          echo "yes" | ./conjur init \
+            -u ${{ vars.CONJUR_URL_INTERNAL }} \
+            -a ${{ vars.CONJUR_ACCOUNT }} \
+            --force \
+            --self-signed
+          ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
+          ./conjur whoami
+
+      - name: Conjur Policy DryRun
+        run: |
+          cd ${{ github.sha }}
+          ./conjur policy load -b demo -f policies/test.yml --dry-run
+
+      - name: Conjur CLI logout
+        run: |
+          cd ${{ github.sha }}
+          ./conjur logout
