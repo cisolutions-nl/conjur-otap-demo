@@ -1,0 +1,9 @@
+# Hosts;
+- !host
+  id: test-workload
+
+# Variables;
+- !variable
+  id: test-username
+- !variable
+  id: test-password
