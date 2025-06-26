@@ -5,7 +5,7 @@ on:
 
 jobs:
   conjur-who-ami:
-    runs-on: proxnuccisp10
+    runs-on: proxnuccis19
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cisolutions-nl/conjur-action@v0.1
