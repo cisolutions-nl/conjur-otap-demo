@@ -10,7 +10,7 @@ jobs:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cyberark/conjur-action@v2.0.5
         with:
-          url: ${{ vars.CONJUR_URL_EXTERNAL }}
+          url: ${{ vars.CONJUR_URL_INTERNAL }}
           account: ${{ vars.CONJUR_ACCOUNT }}
           host_id: ${{ vars.CONJUR_HOST_USERNAME }}
           api_key: ${{ vars.CONJUR_HOST_API_KEY }}
