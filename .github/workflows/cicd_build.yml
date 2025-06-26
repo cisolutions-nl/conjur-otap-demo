@@ -20,7 +20,7 @@ jobs:
         run: yamllint .
 
   conjur-init:
-    name: Conjur Policy Management
+    name: Conjur Policy Management (dry-run)
     runs-on: proxnuccis19
     needs: [yaml-lint]
     steps:

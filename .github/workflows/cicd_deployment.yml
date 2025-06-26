@@ -10,7 +10,7 @@ on:
 
 jobs:
   conjur-init:
-    name: Conjur Policy Management
+    name: Conjur Policy Management (load)
     runs-on: proxnuccis19
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
