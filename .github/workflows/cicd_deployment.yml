@@ -3,6 +3,7 @@ name: Dev App CI/CD Pipeline Deploy
 on:
   push:
     branches:
+      - development
       - test
       - acceptance
       - production
