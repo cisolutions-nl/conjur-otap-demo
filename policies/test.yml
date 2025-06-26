@@ -1,5 +1,5 @@
 - !policy
-  id: ontwikkel
+  id: development
 
 - !policy
   id: test
