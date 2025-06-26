@@ -1,11 +1,25 @@
 ---
-name: Trigger Conjur policy load
+name: Dev App CI/CD Pipeline
 on:
   push:
 
 jobs:
+  yaml-lint:
+    name: Run yamllint
+    runs-on: self-hosted
+    container:
+      image: python:3.11-slim
+    steps:
+      - name: Check out code from GitHub
+        uses: actions/checkout@v3
+      - name: Install Yamllint
+        run: pip install --no-cache-dir yamllint==1.35.1
+      - name: Run Yamllint
+        run: yamllint .
+
   conjur-init:
     runs-on: proxnuccis19
+    needs: [yaml-lint]
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cyberark/conjur-action@v2.0.5
