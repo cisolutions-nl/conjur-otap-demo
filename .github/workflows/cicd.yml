@@ -53,7 +53,7 @@ jobs:
       - name: Conjur Policy Load
         run: |
           cd ${{ github.sha }}
-          ./conjur policy load -b demo -f policies/test.yaml
+          ./conjur policy load -b demo -f policies/test.yml
 
       - name: Conjur CLI logout
         run: |
