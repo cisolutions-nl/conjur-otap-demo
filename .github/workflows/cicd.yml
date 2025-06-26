@@ -22,14 +22,6 @@ jobs:
 
       - name: Trigger Conjur Policy load - init
         run: |
-          echo "Yes" | sudo docker run --rm -i \
-            -v $(pwd)/:/root cyberark/conjur-cli:8 \
-            init -u ${{ vars.CONJUR_URL_EXTERNAL }} \
-            --self-signed --force -a $CONJUR_USERNAME
-
-      - name: Trigger Conjur Policy load - login
-        run: |
-          sudo docker run --rm \
-            -v $(pwd)/:/root cyberark/conjur-cli:8 \
-            login -i $CONJUR_USERNAME \
-            -p $CONJUR_PASSWORD
+          mv lib/conjur-cli-go_8.0.19_linux_amd64 conjur
+          chmod +x conjur
+          ./conjur --version
