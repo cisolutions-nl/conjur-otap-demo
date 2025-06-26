@@ -1,7 +1,7 @@
 ---
 name: Dev App CI/CD Pipeline Build
 on:
-  pull_request:
+  push:
     branches:
       - development
 
