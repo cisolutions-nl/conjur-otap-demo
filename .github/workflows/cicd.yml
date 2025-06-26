@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Check out code from GitHub
         uses: actions/checkout@v4
-        with:
-          path: ${{ github.sha }}
       - name: Install Yamllint
         run: pip install --no-cache-dir yamllint==1.35.1
       - name: Run Yamllint
