@@ -6,7 +6,7 @@ on:
 jobs:
   yaml-lint:
     name: Run yamllint
-    runs-on: self-hosted
+    runs-on: proxnuccis19
     container:
       image: python:3.11-slim
     steps:
