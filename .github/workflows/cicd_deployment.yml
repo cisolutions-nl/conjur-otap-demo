@@ -55,7 +55,6 @@ jobs:
           fi
 
       - name: Conjur Policy Load
-        if: github.event.pull_request.merged == true
         run: |
           cd ${{ github.sha }}
           ./conjur policy load -b demo/${{ env.environment }} -f policies/test.yml
