@@ -6,8 +6,15 @@ on:
       - development
 
 jobs:
+  black:
+    name: Black code check
+    runs-on: proxnuccis19
+    steps:
+      - name: Black code check
+        run: |
+          echo "Black code check"
   yaml-lint:
-    name: Yaml Lint
+    name: Yamllint code check
     runs-on: proxnuccis19
     container:
       image: python:3.11-slim
@@ -22,7 +29,7 @@ jobs:
   conjur-cli-init:
     name: Conjur CLI Init
     runs-on: proxnuccis19
-    needs: [yaml-lint]
+    needs: [black, yaml-lint]
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cyberark/conjur-action@v2.0.5
