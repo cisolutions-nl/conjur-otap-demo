@@ -103,3 +103,12 @@ jobs:
       - name: build-image
         run: |
           echo "Build image for environment: ${{ env.environment }}"
+
+  tag-and-push-image:
+    name: Tag and Push Image
+    runs-on: proxnuccis19
+    needs: [build-image]
+    steps:
+      - name: tag-and-push-image
+        run: |
+          echo "Tag and push image for environment: ${{ env.environment }}"
