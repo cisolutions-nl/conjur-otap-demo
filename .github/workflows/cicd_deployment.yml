@@ -73,7 +73,7 @@ jobs:
           ./conjur logout
 
   deploy-application:
-    name: Deploy Application
+    name: Build Application
     runs-on: proxnuccis19
     needs: [conjur-cli-logout]
     steps:
