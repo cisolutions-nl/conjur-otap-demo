@@ -65,7 +65,7 @@ jobs:
   conjur-cli-logout:
     name: Conjur CLI Logout
     runs-on: proxnuccis19
-    needs: [conjur-policy-dryrun]
+    needs: [conjur-policy-load]
     steps:
       - name: Conjur CLI logout
         run: |
