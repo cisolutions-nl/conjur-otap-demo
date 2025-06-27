@@ -112,3 +112,12 @@ jobs:
       - name: tag-and-push-image
         run: |
           echo "Tag and push image for environment: ${{ env.environment }}"
+
+  retrieve-scan-results-image:
+    name: Retrieve Scan Results Image
+    runs-on: proxnuccis19
+    needs: [tag-and-push-image]
+    steps:
+      - name: retrieve-scan-results-image
+        run: |
+          echo "Retrieve scan results image for environment: ${{ env.environment }}"
