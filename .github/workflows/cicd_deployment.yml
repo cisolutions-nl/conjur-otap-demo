@@ -50,7 +50,7 @@ jobs:
             echo "environment=test" >> $GITHUB_ENV
           elif [[ $GITHUB_REF == 'refs/heads/acceptance' ]]; then
             echo "environment=acceptance" >> $GITHUB_ENV
-          elif [[ $GITHUB_REF == 'refs/heads/production' ]]; then
+          elif [[ $GITHUB_REF == 'refs/heads/main' ]]; then
             echo "environment=production" >> $GITHUB_ENV
           fi
 
