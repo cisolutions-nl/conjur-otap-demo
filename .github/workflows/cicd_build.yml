@@ -95,7 +95,7 @@ jobs:
   integration-tests:
     name: Run Integration Tests
     runs-on: proxnuccis19
-    needs: [conjur-cli-logout]
+    needs: [conjur-policy-dryrun]
     steps:
       - name: Integration tests
         run: |
