@@ -13,6 +13,13 @@ jobs:
       - name: Black code check
         run: |
           echo "Black code check"
+  flake8:
+    name: Flake8 code check
+    runs-on: proxnuccis19
+    steps:
+      - name: Flake8 code check
+        run: |
+          echo "Flake8 code check"
   yaml-lint:
     name: Yamllint code check
     runs-on: proxnuccis19
@@ -29,7 +36,7 @@ jobs:
   conjur-cli-init:
     name: Conjur CLI Init
     runs-on: proxnuccis19
-    needs: [black, yaml-lint]
+    needs: [black, flake8, yaml-lint]
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
         uses: cyberark/conjur-action@v2.0.5
@@ -78,10 +85,28 @@ jobs:
           cd ${{ github.sha }}
           ./conjur logout
 
+  unit-tests:
+    name: Run Unit Tests
+    runs-on: proxnuccis19
+    needs: [conjur-cli-logout]
+    steps:
+      - name: Unit tests
+        run: |
+          echo "Running unit tests for environment: ${{ env.environment }}"
+
+  integration-tests:
+    name: Run Integration Tests
+    runs-on: proxnuccis19
+    needs: [conjur-cli-logout]
+    steps:
+      - name: Integration tests
+        run: |
+          echo "Running integration tests for environment: ${{ env.environment }}"
+
   build-image:
     name: Deploy Application
     runs-on: proxnuccis19
-    needs: [conjur-cli-logout]
+    needs: [unit-tests, integration-tests]
     steps:
       - name: build-image
         run: |
