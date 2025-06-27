@@ -1,0 +1,21 @@
+- !policy
+  id: development
+
+- !policy
+  id: test
+
+- !policy
+  id: acceptance
+
+- !policy
+  id: production
+
+# Hosts;
+- !host
+  id: test-workload
+
+# Variables;
+- !variable
+  id: test-username
+- !variable
+  id: test-password
