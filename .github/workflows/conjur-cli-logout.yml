@@ -6,9 +6,10 @@ jobs:
   logout:
     runs-on: proxnuccis19
     steps:
-      - name: Checkout code
+      - name: Check out code from GitHub
         uses: actions/checkout@v4
-
+        with:
+          path: ${{ github.sha }}
       - name: Conjur CLI logout
         run: |
           cd ${{ github.sha }}

@@ -64,5 +64,6 @@ jobs:
           ./conjur policy load -b demo/${{ env.environment }} -f policies/test.yml
 
   conjur-cli-logout:
+    name: Conjur CLI Logout
     uses: ./.github/workflows/conjur-cli-logout.yml
     needs: [conjur-policy-dryrun]
