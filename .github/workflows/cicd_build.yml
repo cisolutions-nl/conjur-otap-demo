@@ -37,8 +37,8 @@ jobs:
       - name: Run Yamllint
         run: yamllint .
 
-  conjur-cli-init:
-    name: Conjur CLI Init
+  conjur-policy-dryrun:
+    name: Conjur Policy DryRun
     runs-on: proxnuccis19
     needs: [black, flake8, yaml-lint]
     steps:
@@ -68,12 +68,6 @@ jobs:
             --self-signed
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
-
-  conjur-policy-dryrun:
-    name: Conjur Policy DryRun
-    runs-on: proxnuccis19
-    needs: [conjur-cli-init]
-    steps:
       - name: Conjur Policy DryRun
         run: |
           cd ${{ github.sha }}
