@@ -64,10 +64,19 @@ jobs:
           cd ${{ github.sha }}
           ./conjur logout
 
+  pull-image:
+    name: Pull Image
+    runs-on: proxnuccis19
+    needs: [conjur-policy-load]
+    steps:
+      - name: Kubectl Apply
+        run: |
+          echo "Deploying to environment: ${{ env.environment }}"
+
   deploy-application:
     name: Deploy Application
     runs-on: proxnuccis19
-    needs: [conjur-policy-load]
+    needs: [pull-image]
     steps:
       - name: Kubectl Apply
         run: |
