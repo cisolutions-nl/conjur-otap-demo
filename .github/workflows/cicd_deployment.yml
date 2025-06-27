@@ -71,3 +71,12 @@ jobs:
         run: |
           cd ${{ github.sha }}
           ./conjur logout
+
+  deploy-application:
+    name: Deploy Application
+    runs-on: proxnuccis19
+    needs: [conjur-cli-logout]
+    steps:
+      - name: Kubectl Apply
+        run: |
+          echo "Deploying to environment: ${{ env.environment }}"
