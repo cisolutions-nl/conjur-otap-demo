@@ -1,0 +1,11 @@
+- !host
+  id: github-deployment
+  annotations:
+    github: true
+
+- !grant
+  roles:
+    - !layer global-consumers
+    - !layer global-branch-consumers
+  members:
+    - !host github-deployment
