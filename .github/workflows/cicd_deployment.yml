@@ -72,19 +72,10 @@ jobs:
           cd ${{ github.sha }}
           ./conjur logout
 
-  build-image:
-    name: Deploy Application
-    runs-on: proxnuccis19
-    needs: [conjur-cli-logout]
-    steps:
-      - name: Kubectl Apply
-        run: |
-          echo "Build image for environment: ${{ env.environment }}"
-
   deploy-application:
     name: Deploy Application
     runs-on: proxnuccis19
-    needs: [build-image]
+    needs: [conjur-cli-logout]
     steps:
       - name: Kubectl Apply
         run: |
