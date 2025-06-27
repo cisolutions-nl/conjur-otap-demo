@@ -14,8 +14,18 @@
 - !host
   id: test-workload
 
+# Hosts;
+- !host
+  id: test-workload2
+
 # Variables;
 - !variable
   id: test-username
 - !variable
   id: test-password
+
+# Variables;
+- !variable
+  id: test-username2
+- !variable
+  id: test-password2
