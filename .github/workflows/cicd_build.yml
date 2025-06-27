@@ -63,5 +63,10 @@ jobs:
 
   conjur-cli-logout:
     name: Conjur CLI Logout
-    uses: ./.github/workflows/conjur-cli-logout.yml
+    runs-on: proxnuccis19
     needs: [conjur-policy-dryrun]
+    steps:
+      - name: Conjur CLI logout
+        run: |
+          cd ${{ github.sha }}
+          ./conjur logout
