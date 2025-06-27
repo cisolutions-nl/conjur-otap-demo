@@ -5,6 +5,10 @@ on:
     branches:
       - development
 
+concurrency:
+  group: ci-cd-global
+  cancel-in-progress: false
+
 jobs:
   black:
     name: Black code check
