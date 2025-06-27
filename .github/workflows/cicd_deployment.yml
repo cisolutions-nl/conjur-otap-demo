@@ -8,6 +8,10 @@ on:
       - acceptance
       - production
 
+concurrency:
+  group: ci-cd-global
+  cancel-in-progress: false
+
 jobs:
   conjur-cli-init:
     name: Conjur CLI Init
