@@ -78,12 +78,6 @@ jobs:
         run: |
           cd ${{ github.sha }}
           ./conjur policy load -b demo -f policies/test.yml --dry-run
-
-  conjur-cli-logout:
-    name: Conjur CLI Logout
-    runs-on: proxnuccis19
-    needs: [conjur-policy-dryrun]
-    steps:
       - name: Conjur CLI logout
         run: |
           cd ${{ github.sha }}
@@ -92,7 +86,7 @@ jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: proxnuccis19
-    needs: [conjur-cli-logout]
+    needs: [conjur-policy-dryrun]
     steps:
       - name: Unit tests
         run: |
