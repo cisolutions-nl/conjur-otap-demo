@@ -39,7 +39,7 @@ jobs:
           path: ${{ github.sha }}
 
   conjur-cli-init:
-    name: Conjur Action Init
+    name: Conjur CLI Init
     runs-on: proxnuccis19
     needs: [conjur-action-init]
     steps:
