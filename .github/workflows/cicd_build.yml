@@ -7,7 +7,7 @@ on:
 
 jobs:
   yaml-lint:
-    name: Run yamllint
+    name: Yaml Lint
     runs-on: proxnuccis19
     container:
       image: python:3.11-slim
@@ -19,8 +19,8 @@ jobs:
       - name: Run Yamllint
         run: yamllint .
 
-  conjur-init:
-    name: Conjur Policy Management (dry-run)
+  conjur-cli-init:
+    name: Conjur CLI Init
     runs-on: proxnuccis19
     needs: [yaml-lint]
     steps:
@@ -37,7 +37,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ${{ github.sha }}
-
       - name: Conjur CLI init
         run: |
           cd ${{ github.sha }}
@@ -52,11 +51,21 @@ jobs:
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
 
+  conjur-policy-dryrun:
+    name: Conjur Policy DryRun
+    runs-on: proxnuccis19
+    needs: [conjur-cli-init]
+    steps:
       - name: Conjur Policy DryRun
         run: |
           cd ${{ github.sha }}
           ./conjur policy load -b demo -f policies/test.yml --dry-run
 
+  conjur-cli-logout:
+    name: Conjur CLI Logout
+    runs-on: proxnuccis19
+    needs: [conjur-policy-dryrun]
+    steps:
       - name: Conjur CLI logout
         run: |
           cd ${{ github.sha }}
