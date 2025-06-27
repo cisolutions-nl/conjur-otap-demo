@@ -104,7 +104,7 @@ jobs:
           echo "Running integration tests for environment: ${{ env.environment }}"
 
   build-image:
-    name: Deploy Application
+    name: Build Application
     runs-on: proxnuccis19
     needs: [unit-tests, integration-tests]
     steps:
