@@ -83,6 +83,6 @@ jobs:
     runs-on: proxnuccis19
     needs: [conjur-cli-logout]
     steps:
-      - name: Kubectl Apply
+      - name: build-image
         run: |
           echo "Build image for environment: ${{ env.environment }}"
