@@ -1,0 +1,15 @@
+name: Conjur Logout
+on:
+  workflow_call:
+
+jobs:
+  logout:
+    runs-on: proxnuccis19
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Conjur CLI logout
+        run: |
+          cd ${{ github.sha }}
+          ./conjur logout
