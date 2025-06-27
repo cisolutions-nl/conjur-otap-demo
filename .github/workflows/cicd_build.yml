@@ -19,8 +19,8 @@ jobs:
       - name: Run Yamllint
         run: yamllint .
 
-  conjur-action-init:
-    name: Conjur Action Init
+  conjur-cli-init:
+    name: Conjur CLI Init
     runs-on: proxnuccis19
     needs: [yaml-lint]
     steps:
@@ -37,12 +37,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ${{ github.sha }}
-
-  conjur-cli-init:
-    name: Conjur CLI Init
-    runs-on: proxnuccis19
-    needs: [conjur-action-init]
-    steps:
       - name: Conjur CLI init
         run: |
           cd ${{ github.sha }}
