@@ -72,7 +72,7 @@ jobs:
           cd ${{ github.sha }}
           ./conjur logout
 
-  deploy-application:
+  build-application:
     name: Build Application
     runs-on: proxnuccis19
     needs: [conjur-cli-logout]
