@@ -68,6 +68,18 @@ jobs:
             --self-signed
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
+      - name: Set environment
+        id: set_environment
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/development' ]]; then
+            echo "environment=development" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/test' ]]; then
+            echo "environment=test" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/acceptance' ]]; then
+            echo "environment=acceptance" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+            echo "environment=production" >> $GITHUB_ENV
+          fi
       - name: Conjur Policy DryRun
         run: |
           cd ${{ github.sha }}
