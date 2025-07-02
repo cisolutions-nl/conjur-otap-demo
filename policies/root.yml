@@ -1,0 +1,52 @@
+# Hosts & Layers
+- !host development-owner
+- !host test-owner
+- !host acceptance-owner
+- !host production-owner
+
+- !layer global-consumers
+
+# Variables
+- &global-variables
+  - !variable nexus-api-key
+  - !variable bitbucket-api-key
+
+# Branches;
+- !policy
+  id: development
+  owner: !host development-owner
+  body:
+    - !layer global-consumers
+
+- !policy
+  id: test
+  owner: !host test-owner
+  body:
+    - !layer global-consumers
+
+- !policy
+  id: acceptance
+  owner: !host acceptance-owner
+  body:
+    - !layer global-consumers
+
+- !policy
+  id: production
+  owner: !host production-owner
+  body:
+    - !layer global-consumers
+
+# Permits & Grants
+- !permit
+  resources: *global-variables
+  role: !layer global-consumers
+  privileges: [read, execute]
+
+- !grant
+  roles:
+    - !layer development/global-consumers
+    - !layer test/global-consumers
+    - !layer acceptance/global-consumers
+    - !layer production/global-consumers
+  members:
+    - !layer global-consumers
