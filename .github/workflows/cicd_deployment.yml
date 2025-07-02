@@ -54,6 +54,8 @@ jobs:
             echo "environment=acceptance" >> $GITHUB_ENV
           elif [[ $GITHUB_REF == 'refs/heads/main' ]]; then
             echo "environment=production" >> $GITHUB_ENV
+          else
+            echo "environment=development" >> $GITHUB_ENV
           fi
       - name: Conjur Policy Load
         run: |
