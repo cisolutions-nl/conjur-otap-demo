@@ -2,8 +2,8 @@
 name: Dev App CI/CD Pipeline Build
 on:
   pull_request:
-    branches:
-      - development
+#    branches:
+#      - development
 
 jobs:
   yaml-lint:
