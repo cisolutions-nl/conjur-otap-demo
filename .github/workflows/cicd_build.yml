@@ -55,7 +55,9 @@ jobs:
       - name: Conjur Policy DryRun
         run: |
           cd ${{ github.sha }}
-          ./conjur policy load -b demo -f policies/test.yml --dry-run
+          ./conjur policy update -b demo -f policies/root.yml --dry-run
+          ./conjur policy update -b demo/${{ env.environment }} -f policies/root.branch.yml --dry-run
+          ./conjur policy update -b demo/${{ env.environment }} -f <(cat policies/workloads/*) --dry-run
 
       - name: Conjur CLI logout
         run: |
