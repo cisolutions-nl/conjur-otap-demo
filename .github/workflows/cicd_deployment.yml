@@ -8,9 +8,13 @@ on:
       - acceptance
       - production
 
+concurrency:
+  group: ci-cd-global
+  cancel-in-progress: false
+
 jobs:
-  conjur-cli-init:
-    name: Conjur CLI Init
+  conjur-policy-load:
+    name: Conjur policy load
     runs-on: proxnuccis19
     steps:
       - name: Import Secrets using CyberArk Conjur Secret Fetcher Action  # yamllint disable-line rule:line-length
@@ -39,12 +43,6 @@ jobs:
             --self-signed
           ./conjur login -i $CONJUR_USERNAME -p $CONJUR_PASSWORD
           ./conjur whoami
-
-  conjur-policy-load:
-    name: Conjur Policy Load
-    runs-on: proxnuccis19
-    needs: [conjur-cli-init]
-    steps:
       - name: Set environment
         id: set_environment
         run: |
@@ -60,14 +58,37 @@ jobs:
       - name: Conjur Policy Load
         run: |
           cd ${{ github.sha }}
-          ./conjur policy load -b demo/${{ env.environment }} -f policies/test.yml
-
-  conjur-cli-logout:
-    name: Conjur CLI Logout
-    runs-on: proxnuccis19
-    needs: [conjur-policy-load]
-    steps:
+          ./conjur policy update -b demo -f policies/root.yml
+          ./conjur policy update -b demo/${{ env.environment }} -f policies/root.branch.yml
+          ./conjur policy update -b demo/${{ env.environment }} -f <(cat policies/workloads/*)
       - name: Conjur CLI logout
         run: |
           cd ${{ github.sha }}
           ./conjur logout
+
+  pull-image:
+    name: Pull Image
+    runs-on: proxnuccis19
+    needs: [conjur-policy-load]
+    steps:
+      - name: Kubectl Apply
+        run: |
+          echo "Deploying to environment: ${{ env.environment }}"
+
+  deploy-application:
+    name: Deploy Application
+    runs-on: proxnuccis19
+    needs: [pull-image]
+    steps:
+      - name: Kubectl Apply
+        run: |
+          echo "Deploying to environment: ${{ env.environment }}"
+
+  robot-framework-tests:
+    name: Robot Framework Tests
+    runs-on: proxnuccis19
+    needs: [deploy-application]
+    steps:
+      - name: robot-framework-tests
+        run: |
+          echo "Running Robot Framework tests for environment: ${{ env.environment }}"

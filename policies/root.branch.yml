@@ -1,0 +1,14 @@
+- !layer global-branch-consumers
+
+# Variables
+- &global-branch-variables
+  - !variable db-host
+  - !variable db-post
+  - !variable db-username
+  - !variable db-password
+
+# Permits & Grants
+- !permit
+  resources: *global-branch-variables
+  role: !layer global-branch-consumers
+  privileges: [read, execute]

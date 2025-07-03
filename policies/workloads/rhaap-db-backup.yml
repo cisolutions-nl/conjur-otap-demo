@@ -1,0 +1,9 @@
+- !host
+  id: rhaap-db-backup
+  annotations:
+    ansible: true
+
+- !grant
+  role: !layer global-branch-consumers
+  members:
+    - !host rhaap-db-backup

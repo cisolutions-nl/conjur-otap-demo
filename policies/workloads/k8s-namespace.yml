@@ -1,0 +1,25 @@
+- !host
+  id: k8s-namespace
+  annotations:
+    kubernetes: true
+
+- !grant
+  roles:
+    - !layer global-consumers
+    - !layer global-branch-consumers
+  members:
+    - !host github-deployment
+
+- &k8s-workload-variables
+  - !variable environment
+  - !variable debug
+  - !variable mongo-uri
+  - !variable mongo-user
+  - !variable mongo-password
+  - !variable redis-host
+  - !variable redis-port
+
+- !permit
+  resources: *k8s-workload-variables
+  role: !host k8s-namespace
+  privileges: [read, execute]
