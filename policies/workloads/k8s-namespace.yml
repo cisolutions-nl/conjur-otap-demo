@@ -12,6 +12,7 @@
 
 - &k8s-workload-variables
   - !variable environment
+  - !variable debug
   - !variable mongo-uri
   - !variable mongo-user
   - !variable mongo-password
